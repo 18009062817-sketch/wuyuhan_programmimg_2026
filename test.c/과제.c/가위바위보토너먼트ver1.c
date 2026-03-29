@@ -1,3 +1,6 @@
+//이것은 첫 번째 버전으로 가장 간단한 버전이다.
+//상대가 무작위로 선택할 수 없으면 무한 반복을 의해 for(;;),break만 사용한다.
+
 #include<stdio.h>
 int main(){
     int user;

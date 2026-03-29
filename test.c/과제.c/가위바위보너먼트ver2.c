@@ -1,8 +1,12 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<time.h>
+//이것은 두 번째 버전
+//while(1)반복문과 무작위 선택을 사용하여 코드의 가독성과 유지보수성을 더 높다.
 
-void print_choice(int n){
+#include<stdio.h> //헤더파일:printf,scanf등 사용하기 위해
+#include<stdlib.h> //헤더파일:rand,srand등 사용하기 위해
+#include<time.h> //헤더파일:time함수를 사용하기 위해
+
+// 숫자1,2,3을 각각 가위,바위,보를 출력해주는 함수
+void print_choice(int n){  //반환값이 없기 때문에 void를 사용함
     if(n == 1){
         printf("가위");
     }
@@ -14,10 +18,12 @@ void print_choice(int n){
     }
 }
 
-int game(char opponent[], char next_round[]){
-    int user, computer;
+//한번의 경기를 진행하는 함수; 이기면 1 반환,지면 0반환
+int game(char opponent[], char next_round[]){ //opponent:상대 선수;next_round:이겼을때 출력한 라운드 이름
+    int user, computer; //user:사용자;computer:상대 선수
 
-    while(1){
+    //한 경기 안에서 비기면 재경기 해야 하므로 무한 반복
+    while(1){  //while(1)+break 무한 순환
         printf("=================================================================\n");
         printf("[1] 플레이어 -- 상대: %s\n", opponent);
         printf("=================================================================\n");
@@ -27,12 +33,13 @@ int game(char opponent[], char next_round[]){
             printf("선택>");
             scanf("%d", &user);
             
+            //사용자가 1~3 중 올바른 값을 입격할 때까지 반복
             if(user >= 1 && user <= 3){
                 break;
             }
-            printf("1,2,3중에서 선택해주세요.\n");
+            printf("1,2,3중에서 선택해주세요.\n"); //잘못된 값을 입력했을 때 다시 입력 안내
         }    
-        computer = rand()%3 + 1;
+        computer = rand()%3 + 1; //컴퓨터가 1~3 중 하나를 램덤으로 선택; rand() %3 : 0, 1, 2 이므로 +1 : 1, 2, 3으로 만듦 
         
         printf("나:");
         print_choice(user);
@@ -40,13 +47,14 @@ int game(char opponent[], char next_round[]){
         print_choice(computer);
         printf("\n");
 
+        //비긴 경우;현재 경기를 끝내지 않고 다시 while(1)의 처음으로 돌아감
         if(user == computer){
             printf("비겼습니다. 재경기!\n");
             continue;
-        }
+        }//사용자가 이기는 경우; 가위1 > 보3, 바위2 > 가위1, 보3 >  바위2 , ||:or
         else if((user == 1 && computer == 3) || (user == 2 && computer == 1) || (user == 3 && computer == 2)){
             printf("이겼습니다! %s 진출!\n", next_round);
-            return 1;
+            return 1;//이겼을 때
         }
         else{
             printf("졌습니다...\n");
@@ -55,13 +63,13 @@ int game(char opponent[], char next_round[]){
             printf("=================================================================\n");
             printf("아쉽습니다! 다음 기회에 도전해주세요!\n");
             printf("=================================================================\n");
-            return 0;
+            return 0;//졌을때
         }
     } 
 }
 
 int main(){
-    srand(time(NULL));
+    srand(time(NULL)); //랜덤 함수의 씨드를 현재 시간으로 설정; 이 코드가 있어야 프로그램을 실행할 때마다 다른 랜덤 결과가 나움
 
     printf("================================================================\n");
     printf("                    가위바위보 토너먼트                    \n");
@@ -81,19 +89,19 @@ int main(){
     printf("\n");
     printf("================================================================\n");
 
-
+    //8강 경기; game함수가 0를 반환하면 졌다는 뜻이므로 프로그램 중료
     if(!game("A", "4강")){
         return 0;
-    }
+    }//4강 경기; game함수가 0를 반환하면 졌다는 뜻이므로 프로그램 중료
     if(!game("C", "결승")){
         return 0;
-    }
+    }//결승 경기; 여기서 지면 그대로 종료
     if(!game("G", "우승")){
         return 0;
-    }      
+    } //결승까지 이겼을 경우 최중 우승 메시지 출력   
     printf("=================================================================\n");
     printf("축하합니다! 우승하셨습니다!\n");
     printf("=================================================================\n");
-    return 0;
+    return 0;//프로그램 중료
 }
     
